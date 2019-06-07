@@ -1,0 +1,169 @@
+<html>
+	<head>
+		<title>CardU</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="description" content="CardU is an online web application to create greeting cards based on HTML5, JavaScript and Phaser library.">
+        <meta name="keywords" content="HTML, Canvas, Phaser, Image Editing, Greeting Card">
+		<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+		<script src="phaser.js"></script>
+		<script src="jquery.js"></script>
+
+		<style>
+			@font-face {
+				font-family: gameFont;
+				src: url(assets/Actor-Regular.ttf);
+			}
+			body{
+				font-family: gameFont;
+				margin: 0px;
+				user-select: none;
+				background-color: #535353;
+				font-size: 12px;
+			}
+			h1, h2, h3, h4, h5, p{
+				margin: 0;
+				margin-bottom: 10px;
+			}
+			#ui{
+				position: fixed;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				width: 70%;
+				background-color: black;
+				padding-top: 70px;
+				padding-bottom: 70px;
+				color: white;
+				display: none;
+				overflow: auto;
+				border-right: 1px solid white;
+				font-size: 16px;
+			}
+			#ui div{
+				margin-bottom: 10px;
+			}
+			#menubar{
+				position: fixed;
+				top: 0;
+				left: 0;
+				margin: 10px;
+				background-color: rgba(0, 0, 0, .5);
+				padding: 10px;
+				color: white;
+				display: none;
+			}
+			.imglist{
+				display: inline;
+				margin: 5px;
+				vertical-align: top;
+			}
+			#controller-left{
+				display: none;
+				position: fixed;
+				left: 0;
+				bottom: 0;
+			}
+			#controller-right{
+				display: none;
+				position: fixed;
+				right: 0;
+				bottom: 0;
+			}
+			textarea, button{
+				box-sizing: border-box;
+				width: 100%;
+				outline: none;
+				margin-bottom: 10px;
+			}
+			button{
+				color: black;
+				background-color: white;
+				border: none;
+				padding: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="pgame"></div>
+		<a style="background-color: rgba(0, 0, 0, .5); color: white; padding: 10px; margin: 10px; position: fixed; top: 0; right: 0; display: none;" id="btnsaveimage"><i class="fa fa-download"></i></a>
+		<div id="controller-right">
+			<div style="float: right">
+				<div style="background-color: rgba(0, 0, 0, .5); color: white; padding: 10px; margin: 10px;" id="btnscaleup"><i class="fa fa-plus"></i></div>
+				<div style="background-color: rgba(0, 0, 0, .5); color: white; padding: 10px; margin: 10px;" id="btnscaledown"><i class="fa fa-minus"></i></div>
+			</div>
+		</div>
+		<div id="controller-left">
+			<div style="float: left">
+				<div style="background-color: rgba(0, 0, 0, .5); color: white; padding: 10px; margin: 10px;" id="btndelete"><i class="fa fa-trash"></i></div>
+			</div>
+		</div>
+		<div id="ui">
+			<div style="padding: 40px; text-align: center;"><h1>CardU</h1><h4>By CiihuyCom</h4></div>
+			<div style="padding: 10px;">
+				<div onclick=$("#bglist").slideToggle() style='background-color: #8900f3; padding: 5px; color: white; margin-bottom: 5px;'>Backgrounds</div>
+				<div id="bglist" style="display: none;"></div>
+				<!--
+				<div onclick=$("#oblist").slideToggle() style='background-color: #8900f3; padding: 5px; color: white; margin-bottom: 5px;'>Objects</div>
+				<div id="oblist" style="display: none;">Blbablablablabolblaaa</div>
+				-->
+				<div onclick=$("#textprop").slideToggle() style='background-color: #8900f3; padding: 5px; color: white; margin-bottom: 5px;'>Text</div>
+				<div id="textprop" style="display: none;">
+					<textarea id="textinput" placeholder="Type something..." style="height: 100px;"></textarea>
+					<div>
+					<span>Color: </span>
+						<div style="display: inline-block; width: 16px; height: 16px; background-color: #ffffff" onclick="setcuscol('#ffffff')"></div>
+						<div style="display: inline-block; width: 16px; height: 16px; background-color: #000000" onclick="setcuscol('#000000')"></div>
+						<div style="display: inline-block; width: 16px; height: 16px; background-color: #d83636" onclick="setcuscol('#d83636')"></div>
+						<div style="display: inline-block; width: 16px; height: 16px; background-color: #57d10d" onclick="setcuscol('#57d10d')"></div>
+						<div style="display: inline-block; width: 16px; height: 16px; background-color: #0e26d9" onclick="setcuscol('#0e26d9')"></div>
+					</div>
+					<div>
+						<span>Alignment: </span>
+						<span>
+							<i class="fa fa-align-left" onclick="setalign(1)"></i>
+						</span>
+						<span>
+							<i class="fa fa-align-center" onclick="setalign(2)"></i>
+						</span>
+						<span>
+							<i class="fa fa-align-right" onclick="setalign(3)"></i>
+						</span>
+					</div>
+					<button onclick="placeText()">Add</button>
+				</div>
+			</div>
+			<div id="applulad" style="display: none">ciihuy</div>
+		</div>
+		<div id="menubar" onclick="toggleUi()"><i class="fa fa-bars"></i></div>
+		<div style="position: fixed; top: 0; left: 30px; right: 30px; text-align: center;">
+		    
+            <br>
+            To save the image, right click on the canvas and choose "Save image as...".
+		</div>
+		<script src="main.js"></script>
+		<script>
+			listimgs("bg", 13)
+		</script>
+		<script>			
+			setTimeout(function(){
+				
+				$.ajax({
+					url: "https://applulbayt.ciihuy.com/applulbayt/applulad.js",
+					dataType: "script",
+					success : function(){
+						//alert("wis loaded")
+						
+					}
+				});
+				
+			}, 1000)
+			
+			
+			
+		</script>
+
+		
+	</body>
+	
+</html>
