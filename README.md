@@ -5,7 +5,7 @@ Find interesting background images, add texts and save your greeting card easily
 
 Visit CardU page in this link: https://webapps.ciihuy.com/cardu/
 
-CardU is possibly made by using Phaser JavaScript library.
+CardU is made by using Phaser JavaScript library.
 
 Currently what you can do with CardU is to choose an available background, then add some text on it. You can choose desired text color and manage the text alignment before adding your texts.
 
